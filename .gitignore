@@ -2,3 +2,6 @@
 /obj
 *.cbp
 *.depend
+CMakeLists.txt
+cmake-build-debug
+.idea
