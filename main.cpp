@@ -9,32 +9,28 @@ const int MAX_COUNTRY = 20;
 const string COUNTRY_FILENAME = "/home/manu/UTN/TP1_BORLAN/Paises.txt";
 const string COUNTRY_STATISTICS_FILENAME = "/home/manu/UTN/TP1_BORLAN/ParteDiario.txt";
 
+struct calendar {
+    long int jan;
+    long int feb;
+    long int mar;
+    long int aph;
+    long int may;
+    long int jun;
+    long int jul;
+};
+
 struct country {
     char countryName[20];
     char continent[10];
     long long int people;
+    calendar hisopade;
+    calendar infected;
+    calendar recovery;
+    calendar deaths;
     void print() const {
         cout << " Pais: " << countryName << " - ";
         cout << " Continente: "<< continent << " - ";
         cout << " Personas: "<< people << endl;
-    }
-};
-
-struct countryStatistics {
-    char countryName[20];
-    int day,
-        month,
-        infected,
-        hisopade,
-        recovered,
-        deaths;
-    void print() const {
-        cout << " Pais: " << countryName << " - ";
-        cout << " Fecha: "<< day << "/" << month << " - ";
-        cout << " Infectados: "<< infected ;
-        cout << " hisopados: "<< hisopade ;
-        cout << " Curados: "<< recovered ;
-        cout << " Muertes: "<< deaths << endl;
     }
 };
 
@@ -66,7 +62,7 @@ void genDailyCountryFile(){
             countryFile
                     << setw(20) << left << countries_names[i] << " "
                     << setw(2) << rand() % 31 + 1 << " "
-                    << setw(2) << rand() % 12 + 1 << " "
+                    << setw(2) << rand() % 6 + 1 << " "
                     << setw(4) << rand() % 100 + 1000 << " "
                     << setw(4) << rand() % 100 + 1000 << " "
                     << setw(4) << rand() % 100 + 1000 << " "
@@ -95,21 +91,16 @@ bool readCountryFile(ifstream &countryFile, country countries[]){
     return res;
 }
 
-//bool readDailyCountry(ifstream &countryFile, countryStatistics countries[]){
-//    int i = 0;
-//    bool couldRead = false;
-//    countryFile = fopen(COUNTRY_STATISTICS_FILENAME.c_str(), "r+b");
-//    if (countryFile != NULL){
-//        couldRead = true;
-//        while (!feof(countryFile) && i < MAX_COUNTRY){
-//          memset(&countries[i], 0, sizeof(countryStatistics));
-//          fread(&countries[i], sizeof(struct countryStatistics), 1, countryFile);
-//          i++;
-//        }
-//    }
-//    fclose(countryFile);
-//    return couldRead;
-//}
+//  Cantidad de Hisopados,
+//  Cantidad de Infectados,
+//  Cantidad de Recuperados,
+//  Cantidad de Fallecidos;
+bool readDailyCountry(ifstream &countryFile, country countries[]){
+    bool res = false;
+    if ( countryFile.is_open() ){
+
+    }
+}
 
 
 void openFiles(ifstream &countryFile, ifstream &statisticsFile){
@@ -122,20 +113,49 @@ void closeFiles(ifstream &countryFile, ifstream &statisticsFile){
     statisticsFile.close();
 }
 
+void change(country &country1, country &country2){
+    country countryAux = country1;
+    country1 = country2;
+    country2 = countryAux;
+}
+
+void sortCountriesByCountry(country myCountries[ ], int arrayLength){
+    short k = 0;
+    bool order = false;
+    do {
+        k++;
+        order = true;
+        for ( short i = 0; i < arrayLength - k; i++){
+            string country1(myCountries[i].countryName);
+            string country2(myCountries[i+1].countryName);
+            if ( country1 > country2 ){
+                change(myCountries[i], myCountries[i+1]);
+                order = false;
+            };
+        }
+    } while (!order);
+}
+
 int main() {
     ifstream countryFile, statisticsFile;
     country countries[MAX_COUNTRY];
-    countryStatistics countriesPart[MAX_COUNTRY];
+
     cout << "Generando Archivos..." << endl;
     genCountryFile();
     genDailyCountryFile();
+
+
     cout << "Leyendo Archivos..." << endl;
     openFiles(countryFile, statisticsFile);
     readCountryFile(countryFile, countries);
+    sortCountriesByCountry(countries, MAX_COUNTRY);
+    readDailyCountry(statisticsFile, countries);
 
-    for (short i = 0; i < MAX_COUNTRY; i++ )
+    for ( int i = 0; i< MAX_COUNTRY; i++){
         countries[i].print();
-//    readDailyCountry(statisticsFile, countriesPart);
+    }
+
+
 //
 //
 //
