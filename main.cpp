@@ -10,6 +10,11 @@ const int MAX_COUNTRY = 20;
 const string COUNTRY_FILENAME = "/home/manu/UTN/TP1_BORLAN/Paises.txt";
 const string COUNTRY_STATISTICS_FILENAME = "/home/manu/UTN/TP1_BORLAN/ParteDiario.txt";
 
+const string HISOPADE_FILENAME = "/home/manu/UTN/TP1_BORLAN/ListadoHisopados.txt";
+const string INFECTED_FILENAME = "/home/manu/UTN/TP1_BORLAN/ListadoInfectados.txt";
+const string RECOVERED_FILENAME = "/home/manu/UTN/TP1_BORLAN/ListadoRecuperados.txt";
+const string DEATH_FILENAME = "/home/manu/UTN/TP1_BORLAN/ListadoMuertes.txt";
+
 
 struct countryStatistics {
     char countryName[20];
@@ -44,10 +49,11 @@ struct country {
     calendar infected;
     calendar recovered;
     calendar deaths;
-    float getHisopadePercent() const {
-        int hiso = float(hisopade.getTotals());
-        return ( hiso * 100 )/ float(people);
+    float getPercent(calendar typeP) const {
+        int total = float(typeP.getTotals());
+        return ( total * 100 )/ float(people);
     };
+
     void printPeople() const {
         cout << " PAIS "<< countryName << endl;
         cout << " hisopados: "<< hisopade.jan << " - ";
@@ -66,6 +72,7 @@ struct country {
         cout << " Poblacion: "<< people << endl;
     }
 };
+
 
 void genCountryFile(){
     ofstream countryFile;
@@ -208,7 +215,7 @@ void updateCountryData(country &cou, countryStatistics cs){
             cou.deaths.jul   =  cou.deaths.jul + cs.deaths ;
             break;
         }
-//        cou.print();
+        cou.print();
 }
 
 
@@ -273,8 +280,10 @@ void sortCountriesByCountry(country myCountries[ ], int arrayLength){
     } while (!order);
 }
 
+
 void printTitle (ofstream &file, string typelist){
-    file     << "           "<<"Listado de " << typelist << endl
+    file     << setw(50) << left << " "
+             <<"Listado de " << typelist << endl
              <<"Nro." << setw(20) << left <<" Nom." << "Cant.Hab"
              << " ------------- Cantidad de Hisopados por Mes ------------- "
              << "     Cant.   " << "Porcentajes " << endl;
@@ -283,87 +292,79 @@ void printTitle (ofstream &file, string typelist){
              << "May     " << "Jun     "<< "Jul       "<< "Tot.   " << endl;
 }
 
-void writeHisopadeRow(ofstream &hisopade, short index, country countryData){
-    hisopade << setw(4) << left << index + 1
-             << setw(20)<< left << countryData.countryName
-             << setw(9) << left << countryData.people
-             << "       "
-             << setw(8) << left << countryData.hisopade.jan
-             << setw(8) << left << countryData.hisopade.feb
-             << setw(8) << left << countryData.hisopade.mar
-             << setw(8) << left << countryData.hisopade.aph
-             << setw(8)<< left  << countryData.hisopade.may
-             << setw(8)<< left  << countryData.hisopade.jun
-             << setw(8) << left << countryData.hisopade.jul
-             << setw(8)<< left  << countryData.hisopade.getTotals()
-             << setw(8)<< left  << countryData.getHisopadePercent() << endl;
+
+void openWriteFiles(ofstream &hisopade, ofstream &recovered, ofstream &deaths, ofstream &infected){
+    hisopade.open(HISOPADE_FILENAME);
+    recovered.open(RECOVERED_FILENAME);
+    deaths.open(DEATH_FILENAME);
+    infected.open(INFECTED_FILENAME);
 }
 
-void writeDeathsRow(ofstream &hisopade, short index, country countryData){
-    hisopade << setw(4) << left << index + 1
-             << setw(20)<< left << countryData.countryName
-             << setw(9) << left << countryData.people
-             << "       "
-             << setw(8) << left << countryData.deaths.jan
-             << setw(8) << left << countryData.deaths.feb
-             << setw(8) << left << countryData.deaths.mar
-             << setw(8) << left << countryData.deaths.aph
-             << setw(8)<< left  << countryData.deaths.may
-             << setw(8)<< left  << countryData.deaths.jun
-             << setw(8) << left << countryData.deaths.jul
-             << setw(8)<< left  << countryData.deaths.getTotals()
-             << setw(8)<< left  << countryData.getHisopadePercent() << endl;
-}
 
-void writeInfectedRow(ofstream &hisopade, short index, country countryData){
-    hisopade << setw(4) << left << index + 1
-             << setw(20)<< left << countryData.countryName
-             << setw(9) << left << countryData.people
-             << "       "
-             << setw(8) << left << countryData.infected.jan
-             << setw(8) << left << countryData.infected.feb
-             << setw(8) << left << countryData.infected.mar
-             << setw(8) << left << countryData.infected.aph
-             << setw(8)<< left  << countryData.infected.may
-             << setw(8)<< left  << countryData.infected.jun
-             << setw(8) << left << countryData.infected.jul
-             << setw(8)<< left  << countryData.infected.getTotals()
-             << setw(8)<< left  << countryData.getHisopadePercent() << endl;
-}
-
-void writeRecoveredRow(ofstream &recovered, short index, country countryData){
+void writeRow(ofstream &recovered, short index, calendar peopleInfo, country countryData){
     recovered << setw(4) << left << index + 1
              << setw(20)<< left << countryData.countryName
              << setw(9) << left << countryData.people
              << "       "
-             << setw(8) << left << countryData.recovered.jan
-             << setw(8) << left << countryData.recovered.feb
-             << setw(8) << left << countryData.recovered.mar
-             << setw(8) << left << countryData.recovered.aph
-             << setw(8)<< left  << countryData.recovered.may
-             << setw(8)<< left  << countryData.recovered.jun
-             << setw(8) << left << countryData.recovered.jul
-             << setw(8)<< left  << countryData.recovered.getTotals()
-             << setw(8)<< left  << countryData.getHisopadePercent() << endl;
+             << setw(8) << left << peopleInfo.jan
+             << setw(8) << left << peopleInfo.feb
+             << setw(8) << left << peopleInfo.mar
+             << setw(8) << left << peopleInfo.aph
+             << setw(8)<< left  << peopleInfo.may
+             << setw(8)<< left  << peopleInfo.jun
+             << setw(8) << left << peopleInfo.jul
+             << setw(8)<< left  << peopleInfo.getTotals()
+             << setw(8)<< left  << countryData.getPercent(peopleInfo) << endl;
+}
+
+void printFooter(ofstream &file,string typelist, float percent, int total){
+    file << endl
+         << endl
+         << endl
+         << "Cantidad Total de " << typelist
+         << " a la fecha actual: " << total << endl
+         << "Porcentaje  de " << typelist << ".....................: "<< percent << endl;
 }
 
 
-void writeFiles(country countries[]){
+void genFiles(country countries[]){
+    float percentH, percentR, percentI, percentD;
+    int tH, tR, tI, tD;
+    tH = tR = tI = tD = percentH = percentR = percentI = percentD = 0;
     ofstream hisopade, recovered, deaths, infected;
-    hisopade.open("/home/manu/UTN/TP1_BORLAN/ListadoHisopados.txt");
-    recovered.open("/home/manu/UTN/TP1_BORLAN/ListadoRecuperados.txt");
-    deaths.open("/home/manu/UTN/TP1_BORLAN/ListadoMuertes.txt");
-    infected.open("/home/manu/UTN/TP1_BORLAN/ListadoInfectados.txt");
+    openWriteFiles(hisopade, recovered, deaths, infected);
+
     printTitle(hisopade, "Hisopados");
     printTitle(recovered, "Recuperdos");
     printTitle(deaths, "Muertes");
     printTitle(infected, "Infectados");
+
     for( short i = 0; i < MAX_COUNTRY; i++ ){
-        writeHisopadeRow(hisopade, i, countries[i]);
-        writeDeathsRow(recovered, i, countries[i]);
-        writeInfectedRow(deaths, i, countries[i]);
-        writeRecoveredRow(infected, i, countries[i]);
+        writeRow(recovered, i, countries[i].recovered, countries[i]);
+        percentR += countries[i].getPercent(countries[i].recovered);
+        tR += countries[i].recovered.getTotals();
+
+        writeRow(hisopade, i, countries[i].hisopade, countries[i]);
+        percentH += countries[i].getPercent(countries[i].hisopade);
+        tH += countries[i].hisopade.getTotals();
+
+
+        writeRow(deaths, i, countries[i].deaths, countries[i]);
+        percentD += countries[i].getPercent(countries[i].deaths);
+        tD += countries[i].deaths.getTotals();
+
+
+        writeRow(infected, i, countries[i].infected, countries[i]);
+        percentI += countries[i].getPercent(countries[i].infected);
+        tI += countries[i].infected.getTotals();
+
     }
+
+    printFooter(hisopade, "Hisopados", percentH, tH);
+    printFooter(recovered, "Recuperados", percentR, tR);
+    printFooter(deaths, "Muertes", percentD, tD);
+    printFooter(infected, "Infectados", percentI, tI);
+
     hisopade.close();
     recovered.close();
     deaths.close();
@@ -387,8 +388,8 @@ int main() {
     readDailyCountry(statisticsFile, countries);
 
 
-    cout << "Creadno archivos..." << endl;
-    writeFiles(countries);
+    cout << "Creando archivos..." << endl;
+    genFiles(countries);
 
 
     closeFiles(countryFile, statisticsFile);
