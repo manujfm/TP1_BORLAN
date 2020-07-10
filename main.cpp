@@ -7,13 +7,13 @@
 using namespace std;
 const int MAX_COUNTRY = 20;
 
-const string COUNTRY_FILENAME = "/home/manu/UTN/TP1_BORLAN/Paises.txt";
-const string COUNTRY_STATISTICS_FILENAME = "/home/manu/UTN/TP1_BORLAN/ParteDiario.txt";
+const char COUNTRY_FILENAME[] = "Paises.txt";
+const char COUNTRY_STATISTICS_FILENAME[] = "ParteDiario.txt";
 
-const string HISOPADE_FILENAME = "/home/manu/UTN/TP1_BORLAN/ListadoHisopados.txt";
-const string INFECTED_FILENAME = "/home/manu/UTN/TP1_BORLAN/ListadoInfectados.txt";
-const string RECOVERED_FILENAME = "/home/manu/UTN/TP1_BORLAN/ListadoRecuperados.txt";
-const string DEATH_FILENAME = "/home/manu/UTN/TP1_BORLAN/ListadoMuertes.txt";
+const char HISOPADE_FILENAME[] = "ListadoHisopados.txt";
+const char INFECTED_FILENAME[] = "ListadoInfectados.txt";
+const char RECOVERED_FILENAME[] = "ListadoRecuperados.txt";
+const char DEATH_FILENAME[] = "ListadoMuertes.txt";
 
 
 struct countryStatistics {
@@ -44,7 +44,7 @@ struct calendar {
 struct country {
     char countryName[20];
     char continent[10];
-    long long int people;
+    int people;
     calendar hisopade;
     calendar infected;
     calendar recovered;
@@ -216,7 +216,7 @@ void updateCountryData(country &cou, countryStatistics cs){
             cou.deaths.jul   =  cou.deaths.jul + cs.deaths ;
             break;
         }
-        cou.print();
+//        cou.print();
 }
 
 
