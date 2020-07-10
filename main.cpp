@@ -182,10 +182,11 @@ void updateCountryData(country &cou, countryStatistics cs){
             break;
         }
         case 3: {
-            cou.infected.mar =  cou.infected.jan + cs.infected;
-            cou.hisopade.mar =  cou.hisopade.jan + cs.hisopade;
-            cou.recovered.mar =  cou.recovered.jan + cs.recovered;
-            cou.deaths.mar =  cou.deaths.jan + cs.deaths;
+            cou.infected.mar =  cou.infected.mar + cs.infected;
+            cou.hisopade.mar =  cou.hisopade.mar + cs.hisopade;
+            cou.recovered.mar =  cou.recovered.mar + cs.recovered;
+            cou.deaths.mar =  cou.deaths.mar + cs.deaths;
+            break;
         }
         case 4:{
             cou.infected.aph =  cou.infected.aph + cs.infected ;
@@ -377,8 +378,8 @@ int main() {
     country countries[MAX_COUNTRY];
 
     cout << "Generando Archivos..." << endl;
-    genCountryFile();
-    genDailyCountryFile();
+//    genCountryFile();
+//    genDailyCountryFile();
 
 
     cout << "Leyendo Archivos..." << endl;
