@@ -7,13 +7,13 @@
 using namespace std;
 const int MAX_COUNTRY = 20;
 
-const string COUNTRY_FILENAME = "/home/manu/UTN/TP1_BORLAN/Paises.txt";
-const string COUNTRY_STATISTICS_FILENAME = "/home/manu/UTN/TP1_BORLAN/ParteDiario.txt";
+const char COUNTRY_FILENAME[] = "/home/manu/UTN/TP1_BORLAN/Paises.txt";
+const char COUNTRY_STATISTICS_FILENAME[] = "/home/manu/UTN/TP1_BORLAN/ParteDiario.txt";
 
-const string HISOPADE_FILENAME = "/home/manu/UTN/TP1_BORLAN/ListadoHisopados.txt";
-const string INFECTED_FILENAME = "/home/manu/UTN/TP1_BORLAN/ListadoInfectados.txt";
-const string RECOVERED_FILENAME = "/home/manu/UTN/TP1_BORLAN/ListadoRecuperados.txt";
-const string DEATH_FILENAME = "/home/manu/UTN/TP1_BORLAN/ListadoMuertes.txt";
+const char HISOPADE_FILENAME[] = "/home/manu/UTN/TP1_BORLAN/ListadoHisopados.txt";
+const char INFECTED_FILENAME[] = "/home/manu/UTN/TP1_BORLAN/ListadoInfectados.txt";
+const char RECOVERED_FILENAME[] = "/home/manu/UTN/TP1_BORLAN/ListadoRecuperados.txt";
+const char DEATH_FILENAME[] = "/home/manu/UTN/TP1_BORLAN/ListadoMuertes.txt";
 
 
 struct countryStatistics {
@@ -35,7 +35,7 @@ struct calendar {
     long int may;
     long int jun;
     long int jul;
-    int getTotals() const{
+    int getTotal() const{
         return jan + feb + mar + aph + may + jun + jul;
     }
 };
@@ -44,27 +44,24 @@ struct calendar {
 struct country {
     char countryName[20];
     char continent[10];
-    long long int people;
+    int people;
     calendar hisopade;
     calendar infected;
     calendar recovered;
     calendar deaths;
-    float getPercent(calendar typeP) const {
-        int total = float(typeP.getTotals());
-        return ( total * 100 )/ float(people);
+    calendar getAtt(string peopleType){
+        if (peopleType == "hisopade") {
+            return hisopade;
+        } else if (peopleType == "infected"){
+            return infected;
+        } else if (peopleType == "recovered"){
+            return recovered;
+        }
+        return deaths;
     };
-
-    void printPeople() const {
-        cout << " PAIS "<< countryName << endl;
-        cout << " hisopados: "<< hisopade.jan << " - ";
-        cout << " infectados: "<< infected.jan <<" - ";
-        cout << " Recuperados: "<< recovered.jan << " - ";
-        cout << " Muertos: "<< deaths.jan << endl;
-
-        cout << " FEB hisopados: "<< hisopade.feb << " - ";
-        cout << " FEB infectados: "<< infected.feb <<" - ";
-        cout << " FEB Recuperados: "<< recovered.feb << " - ";
-        cout << " FEB Muertos: "<< deaths.feb << endl;
+    float getPercent(calendar typeP) const {
+        int total = float(typeP.getTotal());
+        return ( total * 100 )/ float(people);
     };
     void print() const {
         cout << " Pais: " << countryName << " - ";
@@ -216,7 +213,6 @@ void updateCountryData(country &cou, countryStatistics cs){
             cou.deaths.jul   =  cou.deaths.jul + cs.deaths ;
             break;
         }
-        cou.print();
 }
 
 
@@ -282,6 +278,22 @@ void sortCountriesByCountry(country myCountries[ ], int arrayLength){
 }
 
 
+void sortCountriesByTotal(country myCountries[ ], int arrayLength, string typeP){
+    short k = 0;
+    bool order = false;
+    do {
+        k++;
+        order = true;
+        for ( short i = 0; i < arrayLength - k; i++){;
+            if ( myCountries[i].getAtt(typeP).getTotal() < myCountries[i+1].getAtt(typeP).getTotal() ){
+                change(myCountries[i], myCountries[i+1]);
+                order = false;
+            };
+        }
+    } while (!order);
+}
+
+
 void printTitle (ofstream &file, string typelist){
     file     << setw(50) << left << " "
              <<"Listado de " << typelist << endl
@@ -314,9 +326,10 @@ void writeRow(ofstream &recovered, short index, calendar peopleInfo, country cou
              << setw(8)<< left  << peopleInfo.may
              << setw(8)<< left  << peopleInfo.jun
              << setw(8) << left << peopleInfo.jul
-             << setw(8)<< left  << peopleInfo.getTotals()
+             << setw(8)<< left  << peopleInfo.getTotal()
              << setw(8)<< left  << countryData.getPercent(peopleInfo) << endl;
 }
+
 
 void printFooter(ofstream &file,string typelist, float percent, int total){
     file << endl
@@ -340,27 +353,35 @@ void genFiles(country countries[]){
     printTitle(deaths, "Muertes");
     printTitle(infected, "Infectados");
 
-    for( short i = 0; i < MAX_COUNTRY; i++ ){
-        writeRow(recovered, i, countries[i].recovered, countries[i]);
-        percentR += countries[i].getPercent(countries[i].recovered);
-        tR += countries[i].recovered.getTotals();
-
+    sortCountriesByTotal(countries, MAX_COUNTRY, "hisopade");
+    for( short i = 0; i < MAX_COUNTRY; i++ ) {
         writeRow(hisopade, i, countries[i].hisopade, countries[i]);
         percentH += countries[i].getPercent(countries[i].hisopade);
-        tH += countries[i].hisopade.getTotals();
+        tH += countries[i].hisopade.getTotal();
+    }
 
-
-        writeRow(deaths, i, countries[i].deaths, countries[i]);
-        percentD += countries[i].getPercent(countries[i].deaths);
-        tD += countries[i].deaths.getTotals();
-
-
-        writeRow(infected, i, countries[i].infected, countries[i]);
-        percentI += countries[i].getPercent(countries[i].infected);
-        tI += countries[i].infected.getTotals();
+    sortCountriesByTotal(countries, MAX_COUNTRY, "recovered");
+    for( short i = 0; i < MAX_COUNTRY; i++ ) {
+        writeRow(recovered, i, countries[i].recovered, countries[i]);
+        percentR += countries[i].getPercent(countries[i].recovered);
+        tR += countries[i].recovered.getTotal();
 
     }
 
+    sortCountriesByTotal(countries, MAX_COUNTRY, "infected");
+    for( short i = 0; i < MAX_COUNTRY; i++ ) {
+        writeRow(infected, i, countries[i].infected, countries[i]);
+        percentI += countries[i].getPercent(countries[i].infected);
+        tI += countries[i].infected.getTotal();
+    }
+
+    sortCountriesByTotal(countries, MAX_COUNTRY, "deaths");
+    for( short i = 0; i < MAX_COUNTRY; i++ ) {
+        writeRow(deaths, i, countries[i].deaths, countries[i]);
+        percentD += countries[i].getPercent(countries[i].deaths);
+        tD += countries[i].deaths.getTotal();
+
+    }
     printFooter(hisopade, "Hisopados", percentH, tH);
     printFooter(recovered, "Recuperados", percentR, tR);
     printFooter(deaths, "Muertes", percentD, tD);
@@ -378,8 +399,8 @@ int main() {
     country countries[MAX_COUNTRY];
 
     cout << "Generando Archivos..." << endl;
-//    genCountryFile();
-//    genDailyCountryFile();
+    genCountryFile();
+    genDailyCountryFile();
 
 
     cout << "Leyendo Archivos..." << endl;
