@@ -1,20 +1,38 @@
 Venezuela            America    504289383
+
 Bolivia              America    746930886
+
 Peru                 America    681692777
+
 Argentina            America    714636915
+
 Uruguay              America    657747793
+
 Paraguay             America    624238335
+
 Colombia             America    619885386
+
 Espana               Europa     649760492
-Paris                Europa     796516649
+
+Fancia               Europa     796516649
+
 Italia               Europa     789641421
+
 Portugal             Europa     625202362
+
 Mexico               America    650490027
+
 Panama               America    683368690
 China                Asia       702520059
+
 Japon                Asia       744897763
+
 Rusia                Asia       667513926
+
 Canada               America    665180540
+
 Brasil               America    540383426
+
 Chile                America    504089172
+
 Inglaterra           Europa     603455736
