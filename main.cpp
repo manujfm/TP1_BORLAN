@@ -7,13 +7,13 @@
 using namespace std;
 const int MAX_COUNTRY = 20;
 
-const char COUNTRY_FILENAME[] = "/home/manu/UTN/TP1_BORLAN/Paises.txt";
-const char COUNTRY_STATISTICS_FILENAME[] = "/home/manu/UTN/TP1_BORLAN/ParteDiario.txt";
+const char COUNTRY_FILENAME[] = "Paises.txt";
+const char COUNTRY_STATISTICS_FILENAME[] = "ParteDiario.txt";
 
-const char HISOPADE_FILENAME[] = "/home/manu/UTN/TP1_BORLAN/ListadoHisopados.txt";
-const char INFECTED_FILENAME[] = "/home/manu/UTN/TP1_BORLAN/ListadoInfectados.txt";
-const char RECOVERED_FILENAME[] = "/home/manu/UTN/TP1_BORLAN/ListadoRecuperados.txt";
-const char DEATH_FILENAME[] = "/home/manu/UTN/TP1_BORLAN/ListadoMuertes.txt";
+const char HISOPADE_FILENAME[] = "ListadoHisopados.txt";
+const char INFECTED_FILENAME[] = "ListadoInfectados.txt";
+const char RECOVERED_FILENAME[] = "ListadoRecuperados.txt";
+const char DEATH_FILENAME[] = "ListadoMuertes.txt";
 
 
 struct countryStatistics {
@@ -69,47 +69,6 @@ struct country {
         cout << " Poblacion: "<< people << endl;
     }
 };
-
-
-void genCountryFile(){
-    ofstream countryFile;
-    string countries_names[MAX_COUNTRY] = {"Venezuela","Bolivia","Peru","Argentina","Uruguay","Paraguay","Colombia","Espana","Paris","Italia","Portugal","Mexico","Panama","China","Japon","Rusia","Canada","Brasil","Chile","Inglaterra"};
-    string continent[MAX_COUNTRY] = {"America","America","America","America","America","America","America","Europa","Europa","Europa","Europa","America","America","Asia","Asia","Asia","America","America","America","Europa"};
-    int i;
-    countryFile.open(COUNTRY_FILENAME);
-    if (countryFile.is_open()){
-        for (i = 0; i < MAX_COUNTRY; i++) {
-            int people = rand() % 300000000 + 500000000;
-            countryFile
-            << setw(20) << left << countries_names[i] << " "
-            << setw(10) << continent[i]               << " "
-            << people << endl;
-         }
-    }
-    countryFile.close();
-}
-
-
-void genDailyCountryFile(){
-    ofstream countryFile;
-    string countries_names[MAX_COUNTRY] = {"Venezuela","Bolivia","Peru","Argentina","Uruguay","Paraguay","Colombia","Espana","Paris","Italia","Portugal","Mexico","Panama","China","Japon","Rusia","Canada","Brasil","Chile","Inglaterra"};
-    int i;
-    countryFile.open(COUNTRY_STATISTICS_FILENAME);
-    if (countryFile.is_open()){
-        for (i = 0; i < MAX_COUNTRY; i++) {
-            countryFile
-                    << setw(20) << left << countries_names[i] << " "
-                    << setw(2) << rand() % 31 + 1 << " "
-//                    << setw(2) << rand() % 6 + 1 << " "
-                    << setw(2) << 1 << " "
-                    << setw(4) << rand() % 100 + 1000 << " "
-                    << setw(4) << rand() % 100 + 1000 << " "
-                    << setw(4) << rand() % 100 + 1000 << " "
-                    << setw(4) << rand() % 100 + 1000 << endl;
-        }
-    }
-    countryFile.close();
-}
 
 
 bool readCountryFile(ifstream &countryFile, country countries[]){
@@ -344,6 +303,7 @@ void printFooter(ofstream &file,string typelist, float percent, int total){
 void genFiles(country countries[]){
     float percentH, percentR, percentI, percentD;
     int tH, tR, tI, tD;
+    int MAX_LISTADO = 10;
     tH = tR = tI = tD = percentH = percentR = percentI = percentD = 0;
     ofstream hisopade, recovered, deaths, infected;
     openWriteFiles(hisopade, recovered, deaths, infected);
@@ -354,14 +314,14 @@ void genFiles(country countries[]){
     printTitle(infected, "Infectados");
 
     sortCountriesByTotal(countries, MAX_COUNTRY, "hisopade");
-    for( short i = 0; i < MAX_COUNTRY; i++ ) {
+    for( short i = 0; i < MAX_LISTADO; i++ ) {
         writeRow(hisopade, i, countries[i].hisopade, countries[i]);
         percentH += countries[i].getPercent(countries[i].hisopade);
         tH += countries[i].hisopade.getTotal();
     }
 
     sortCountriesByTotal(countries, MAX_COUNTRY, "recovered");
-    for( short i = 0; i < MAX_COUNTRY; i++ ) {
+    for( short i = 0; i < MAX_LISTADO; i++ ) {
         writeRow(recovered, i, countries[i].recovered, countries[i]);
         percentR += countries[i].getPercent(countries[i].recovered);
         tR += countries[i].recovered.getTotal();
@@ -369,14 +329,14 @@ void genFiles(country countries[]){
     }
 
     sortCountriesByTotal(countries, MAX_COUNTRY, "infected");
-    for( short i = 0; i < MAX_COUNTRY; i++ ) {
+    for( short i = 0; i < MAX_LISTADO; i++ ) {
         writeRow(infected, i, countries[i].infected, countries[i]);
         percentI += countries[i].getPercent(countries[i].infected);
         tI += countries[i].infected.getTotal();
     }
 
     sortCountriesByTotal(countries, MAX_COUNTRY, "deaths");
-    for( short i = 0; i < MAX_COUNTRY; i++ ) {
+    for( short i = 0; i < MAX_LISTADO; i++ ) {
         writeRow(deaths, i, countries[i].deaths, countries[i]);
         percentD += countries[i].getPercent(countries[i].deaths);
         tD += countries[i].deaths.getTotal();
@@ -398,21 +358,14 @@ int main() {
     ifstream countryFile, statisticsFile;
     country countries[MAX_COUNTRY];
 
-    cout << "Generando Archivos..." << endl;
-    genCountryFile();
-    genDailyCountryFile();
-
-
     cout << "Leyendo Archivos..." << endl;
     openFiles(countryFile, statisticsFile);
     readCountryFile(countryFile, countries);
     sortCountriesByCountry(countries, MAX_COUNTRY);
     readDailyCountry(statisticsFile, countries);
 
-
     cout << "Creando archivos..." << endl;
     genFiles(countries);
-
 
     closeFiles(countryFile, statisticsFile);
     return 0;
