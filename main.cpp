@@ -257,7 +257,7 @@ void printTitle (ofstream &file, string typelist){
     file     << setw(50) << left << " "
              <<"Listado de " << typelist << endl
              <<"Nro." << setw(20) << left <<" Nom." << "Cant.Hab"
-             << " ------------- Cantidad de Hisopados por Mes ------------- "
+             << " ------------- Cantidad de "<< typelist << " por Mes ------------- "
              << "     Cant.   " << "Porcentajes " << endl;
     file     << "Ord" << setw(20) << left << " País" << "                  "
              << "Ene     " << "Feb     "<< "Mar    "<< "Abr    "
@@ -309,7 +309,7 @@ void genFiles(country countries[]){
     openWriteFiles(hisopade, recovered, deaths, infected);
 
     printTitle(hisopade, "Hisopados");
-    printTitle(recovered, "Recuperdos");
+    printTitle(recovered, "Recuperados");
     printTitle(deaths, "Muertes");
     printTitle(infected, "Infectados");
 
