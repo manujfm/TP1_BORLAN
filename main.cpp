@@ -3,17 +3,13 @@ Algoritmos y Estructura de Datos
 Curso K1092  - Grupo 6
 
 integrantes:
+Francisco Javier Azpitarte
 Alexis Cabo
 Jhonny Teran Claure
 Manuel Marcano Quijada
 Sebastian Rolando
 Tomas Ezama
-
-
 */
-
-
-
 
 #include <iostream>
 #include <cstring>
