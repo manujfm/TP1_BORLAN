@@ -1,24 +1,30 @@
 /*
-Algoritmos y Estructura de Datos
-Curso K1092  - Grupo 6
-
-integrantes:
-Francisco Javier Azpitarte
-Alexis Cabo
-Jhonny Teran Claure
-Manuel Marcano Quijada
-Sebastian Rolando
-Tomas Ezama
+    Algoritmos y Estructura de Datos
+    Curso K1092  - Grupo 6
+    Hora: Tarde - Noche
+    Integrantes:
+        Francisco Javier Azpitarte
+        Alexis Cabo
+        Jhonny Teran Claure
+        Manuel Marcano Quijada
+        Sebastian Rolando
+        Tomas Ezama
 */
+/* 13/08/20 -- Segunda Correccion (Profe, somos el equipo del archivo en UNIX)
+    Las modificaciones entonces serían:
+        - La constante de cantidad de países en vez de 20 debe ser 200 (doscientos)
+        - Invertir el orden de lectura en el archivo de ParteDiario del día con el mes, ya que en las consignas primero es el mes y a continuación el día.
+        - En las cadenas siempre se establece un lugar más, es decir si va a contener 20 caracteres le damos longitud física de 21, si es de 10 le damos 11.
+        - La salida en los listados mejorar el alineamiento, las cadenas alineadas a la izquierda y los valores numéricos alineados a la derecha.
+ * */
 
 #include <iostream>
 #include <cstring>
-#include <stdlib.h>
 #include <fstream>
 #include <iomanip>      // std::setw
 
 using namespace std;
-const int MAX_COUNTRY = 20;
+const int MAX_COUNTRY = 200;
 
 const char COUNTRY_FILENAME[] = "Paises.txt";
 const char COUNTRY_STATISTICS_FILENAME[] = "ParteDiario.txt";
@@ -29,7 +35,7 @@ const char RECOVERED_FILENAME[] = "ListadoRecuperados.txt";
 const char DEATH_FILENAME[] = "ListadoMuertes.txt";
 
 struct countryStatistics {
-    char countryName[20];
+    char countryName[21];
     int day,
             month,
             infected,
@@ -52,8 +58,8 @@ struct calendar {
 };
 
 struct country {
-    char countryName[20];
-    char continent[10];
+    char countryName[21];
+    char continent[11];
     int people;
     calendar hisopade;
     calendar infected;
@@ -84,9 +90,9 @@ int readCountryFile(ifstream &countryFile, country countries[]){
             memset(&countries[i].recovered, 0, sizeof(calendar));
             memset(&countries[i].deaths, 0, sizeof(calendar));
             
-            countryFile.get(countries[i].countryName, 20);
+            countryFile.get(countries[i].countryName, 21);
             countryFile.ignore();
-            countryFile.get(countries[i].continent, 10);
+            countryFile.get(countries[i].continent, 11);
             countryFile >> countries[i].people;
             countryFile.ignore();
 
@@ -179,13 +185,12 @@ void readDailyCountry(ifstream &countryFile, country countries[], short cantCoun
     if ( countryFile.is_open() ){
         while (!countryFile.eof()){
             countryStatistics cst;
-            countryFile.get(cst.countryName, 20);
-            countryFile.ignore();
-            countryFile >> cst.day       >> cst.month
+            countryFile.get(cst.countryName, 21);
+            countryFile.ignore(1);
+            countryFile >> cst.month    >> cst.day
                         >> cst.hisopade  >> cst.infected
                         >> cst.recovered >> cst.deaths;
-            countryFile.ignore();
-
+            countryFile.ignore(2);
             index = findByCountry(countries, cst.countryName, cantCountries);
             updateCountryData(countries[index], cst);
         }
@@ -246,9 +251,11 @@ void printTitle (ofstream &file, string typelist){
              <<"Nro." << setw(20) << left <<" Nom." << "Cant.Hab"
              << " ------------- Cantidad de "<< typelist << " por Mes ------------- "
              << "     Cant.   " << "Porcentajes " << endl;
-    file     << "Ord" << setw(20) << left << " País" << "                  "
-             << "Ene     " << "Feb     "<< "Mar    "<< "Abr    "
-             << "May     " << "Jun     "<< "Jul       "<< "Tot.   " << endl;
+    file     << "Ord" << setw(20) << left << " País" << "               "
+             << "Ene" << "      Feb" << "     Mar"
+             << "    Abr" << "     May" << "     Jun"
+             << "     Jul"
+             << "     Tot." << endl;
 }
 
 void openWriteFiles(ofstream &hisopade, ofstream &recovered, ofstream &deaths, ofstream &infected){
@@ -259,19 +266,21 @@ void openWriteFiles(ofstream &hisopade, ofstream &recovered, ofstream &deaths, o
 }
 
 void writeRow(ofstream &recovered, short index, calendar peopleInfo, country countryData){
-    recovered << setw(4) << left << index + 1
-             << setw(20)<< left << countryData.countryName
-             << setw(9) << left << countryData.people
-             << "       "
-             << setw(8) << left << peopleInfo.jan
-             << setw(8) << left << peopleInfo.feb
-             << setw(8) << left << peopleInfo.mar
-             << setw(8) << left << peopleInfo.aph
-             << setw(8)<< left  << peopleInfo.may
-             << setw(8)<< left  << peopleInfo.jun
-             << setw(8) << left << peopleInfo.jul
-             << setw(8)<< left  << peopleInfo.getTotal()
-             << setw(8)<< left  << countryData.getPercent(peopleInfo) << endl;
+    recovered << setw(3)  << right << index + 1
+              << " "
+              << setw(20) << left << countryData.countryName
+              << setw(9)  << right << countryData.people
+              << "   "
+              << setw(7)  << right << peopleInfo.jan
+              << setw(8)  << right << peopleInfo.feb
+              << setw(8)  << right << peopleInfo.mar
+              << setw(8)  << right << peopleInfo.aph
+              << setw(8)  << right << peopleInfo.may
+              << setw(8)  << right << peopleInfo.jun
+              << setw(8)  << right << peopleInfo.jul
+              << setw(8)  << right << peopleInfo.getTotal()
+              << "   "
+              << setw(12) << left  << countryData.getPercent(peopleInfo) << endl;
 }
 
 void printFooter(ofstream &file,string typelist, float percent, int total){
@@ -341,11 +350,13 @@ int main() {
     country countries[MAX_COUNTRY];
     short cantCountries;
 
-    cout << "Leyendo Archivos..." << endl;
+    cout << "Leyendo Archivo Pais..." << endl;
     openFiles(countryFile, statisticsFile);
  
     cantCountries = readCountryFile(countryFile, countries);
     sortCountriesByCountry(countries, cantCountries);
+
+    cout << "Leyendo Archivo Diario..." << endl;
     readDailyCountry(statisticsFile, countries, cantCountries);
  
     cout << "Creando archivos..." << endl;

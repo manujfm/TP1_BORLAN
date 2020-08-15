@@ -6,7 +6,7 @@ Uruguay              America    657747793
 Paraguay             America    624238335
 Colombia             America    619885386
 Espana               Europa     649760492
-Paris                Europa     796516649
+Francia              Europa     796516649
 Italia               Europa     789641421
 Portugal             Europa     625202362
 Mexico               America    650490027
