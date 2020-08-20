@@ -190,7 +190,7 @@ void readDailyCountry(ifstream &countryFile, country countries[], short cantCoun
             countryFile >> cst.month    >> cst.day
                         >> cst.hisopade  >> cst.infected
                         >> cst.recovered >> cst.deaths;
-            countryFile.ignore(2);
+            countryFile.ignore(1);
             index = findByCountry(countries, cst.countryName, cantCountries);
             updateCountryData(countries[index], cst);
         }
