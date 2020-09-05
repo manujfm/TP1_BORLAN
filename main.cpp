@@ -1,7 +1,5 @@
 232---------------
 22222
-44444
-55555
 /*
     Algoritmos y Estructura de Datos
     Curso K1092  - Grupo 6
