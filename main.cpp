@@ -9,6 +9,83 @@
         Manuel Marcano Quijada
         Sebastian Rolando
         Tomas Ezama
+*//*
+    Algoritmos y Estructura de Datos
+    Curso K1092  - Grupo 6
+    Hora: Tarde - Noche
+    Integrantes:
+        Francisco Javier Azpitarte
+        Alexis Cabo
+        Jhonny Teran Claure
+        Manuel Marcano Quijada
+        Sebastian Rolando
+        Tomas Ezama
+*//*
+    Algoritmos y Estructura de Datos
+    Curso K1092  - Grupo 6
+    Hora: Tarde - Noche
+    Integrantes:
+        Francisco Javier Azpitarte
+        Alexis Cabo
+        Jhonny Teran Claure
+        Manuel Marcano Quijada
+        Sebastian Rolando
+        Tomas Ezama
+*//*
+    Algoritmos y Estructura de Datos
+    Curso K1092  - Grupo 6
+    Hora: Tarde - Noche
+    Integrantes:
+        Francisco Javier Azpitarte
+        Alexis Cabo
+        Jhonny Teran Claure
+        Manuel Marcano Quijada
+        Sebastian Rolando
+        Tomas Ezama
+*//*
+    Algoritmos y Estructura de Datos
+    Curso K1092  - Grupo 6
+    Hora: Tarde - Noche
+    Integrantes:
+        Francisco Javier Azpitarte
+        Alexis Cabo
+        Jhonny Teran Claure
+        Manuel Marcano Quijada
+        Sebastian Rolando
+        Tomas Ezama
+*//*
+    Algoritmos y Estructura de Datos
+    Curso K1092  - Grupo 6
+    Hora: Tarde - Noche
+    Integrantes:
+        Francisco Javier Azpitarte
+        Alexis Cabo
+        Jhonny Teran Claure
+        Manuel Marcano Quijada
+        Sebastian Rolando
+        Tomas Ezama
+*//*
+    Algoritmos y Estructura de Datos
+    Curso K1092  - Grupo 6
+    Hora: Tarde - Noche
+    Integrantes:
+        Francisco Javier Azpitarte
+        Alexis Cabo
+        Jhonny Teran Claure
+        Manuel Marcano Quijada
+        Sebastian Rolando
+        Tomas Ezama
+*//*
+    Algoritmos y Estructura de Datos
+    Curso K1092  - Grupo 6
+    Hora: Tarde - Noche
+    Integrantes:
+        Francisco Javier Azpitarte
+        Alexis Cabo
+        Jhonny Teran Claure
+        Manuel Marcano Quijada
+        Sebastian Rolando
+        Tomas Ezama
 */
 /* 13/08/20 -- Segunda Correccion (Profe, somos el equipo del archivo en UNIX)
     Las modificaciones entonces serían:
